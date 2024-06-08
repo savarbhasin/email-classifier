@@ -1,11 +1,20 @@
 "use client"
 import { useGoogleLogin } from '@react-oauth/google';
 import { useRouter } from 'next/navigation';
-import React from 'react';
+import React, { useEffect } from 'react';
 import toast from 'react-hot-toast';
 
 const page = () => {
+
+
     const router = useRouter();
+
+    useEffect(()=>{
+        const token = localStorage.getItem('token');
+        if(token){
+            router.push('/');
+        }
+    },[router])
 
     const login = useGoogleLogin({
         onSuccess: async (response) => {
@@ -18,7 +27,7 @@ const page = () => {
     });
 
     return (
-        <div className="relative flex items-center justify-center min-h-screen bg-gradient-to-br from-purple-400 via-pink-500 to-red-500">
+        <div className="relative flex items-center justify-center min-h-screen ">
             <div className="absolute inset-0 bg-black opacity-30"></div>
             <div className="relative z-10 p-8 rounded-2xl shadow-2xl bg-white bg-opacity-10 backdrop-blur-md max-w-lg mx-auto">
                 <div className="flex justify-center mb-8">
@@ -27,13 +36,13 @@ const page = () => {
                     </svg>
                 </div>
                 <h1 className="text-4xl font-extrabold mb-4 text-white text-center leading-tight">
-                    Welcome to<br /><span className="bg-clip-text text-transparent bg-gradient-to-r from-yellow-400 to-orange-500">Email Manager</span>
+                    Welcome to<br /><span className="text-white">Email Manager</span>
                 </h1>
                 <p className="text-lg mb-8 text-gray-200 text-center">
                     Manage your Gmail effortlessly. Automatically label emails as spam, important, and more.
                 </p>
                 <button 
-                    className="w-full bg-gradient-to-r from-green-400 to-blue-500 hover:from-green-500 hover:to-blue-600 text-white font-bold py-3 px-6 rounded-full shadow-lg transform hover:scale-105 transition duration-300 ease-in-out flex items-center justify-center"
+                    className="w-full text-white font-bold py-3 px-6 rounded-full border-2 flex items-center justify-center"
                     onClick={() => login()}
                 >
                     <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mr-2" fill="currentColor" viewBox="0 0 24 24">
@@ -47,19 +56,11 @@ const page = () => {
                 </button>
                 <div className="mt-8 text-center text-gray-300">
                     <p>By logging in, you agree to our</p>
-                    <a href="#" className="text-blue-300 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-300 hover:underline">Privacy Policy</a>
+                    <a href="#" className="text-blue-500 hover:underline">Terms of Service</a> and <a href="#" className="text-blue-500 hover:underline">Privacy Policy</a>
                 </div>
             </div>
-            <div className="absolute bottom-0 left-0 m-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-12 w-12 text-white opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-            </div>
-            <div className="absolute top-0 right-0 m-4">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-16 w-16 text-white opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 15a4 4 0 004 4h9a5 5 0 10-.1-9.999 5.002 5.002 0 10-9.78 2.096A4.001 4.001 0 003 15z" />
-                </svg>
-            </div>
+            
+            
         </div>
     );
 };

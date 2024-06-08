@@ -12,23 +12,42 @@ export default function Home() {
   const [loading,setLoading] = useState(false);
   const [labels,setLabels] = useState<string[] | null>(null);
   const [labelLoading,setLabelLoading] = useState(false);
+  const [key,setKey] = useState<string | null>(null);
 
   const token = localStorage.getItem('token');
   const router = useRouter();
   const hasFetchedData = useRef(false);
+
+
   useEffect(() => {
     if (!token) {
       router.push('/login');
     }
+
+    const key = localStorage.getItem('apiKey');
+    if(key){
+      setKey(key);
+    }
+
     if (!hasFetchedData.current) {
       hasFetchedData.current = true;
       fetchData({ maxRes: 5 });
     }
-  }, [])
+  }, [token,router])
 
   const [data, setData] = useState([]);
 
   
+  axiosInstance.interceptors.response.use(
+      (response) => response,
+      (error) => {
+      
+        const router = useRouter();
+        router.push('/login');
+        toast.error("Session Expired. Please login again");
+        return Promise.reject(error);
+      }
+    );
 
   const fetchData = async ({ maxRes }: { maxRes: number }) => {
     setLoading(true);
@@ -70,13 +89,15 @@ export default function Home() {
     fetchData({ maxRes: Number(e.target.value) });
   }
 
+
   const clickHandler = async () => {
     setLabelLoading(true);
     try{
-      
       const res = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/classify`,{
-        //@ts-ignore
-        data: data.map((item)=>[item.snippet, item.payload.headers.find((header: {name:string, value:string}) => header.name === 'Subject')?.value])
+        data: {
+          emails:data.map((item:any)=>[item.snippet, item.payload.headers.find((header: {name:string, value:string}) => header.name === 'Subject')?.value]),
+          apiKey: key
+        }
       })
       const {text} = res.data;
     
@@ -84,8 +105,9 @@ export default function Home() {
       cleanedText = cleanedText.replaceAll('`', '');
       const labels = JSON.parse(cleanedText);
       setLabels(labels);  
-    } catch(e){
-      console.log(e)
+    } catch(e:any){
+      console.log(e);
+      toast.error(e.response.data.error);
     }
     setLabelLoading(false);
   }
@@ -102,8 +124,29 @@ export default function Home() {
             ))
           }
         </select>
-       
-        <button onClick={clickHandler} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Classify</button>
+        <button onClick={()=>{
+          googleLogout();
+          localStorage.removeItem('token');
+          router.push('/login');
+        }} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Logout</button>
+        { !key? <div className="flex gap-2">
+            <input type="text" id="key-input" placeholder="Enter OpenAI key" className="rounded-xl outline-none px-3 py-2"/>
+            <button className="px-3 py-2 bg-blue-500 text-white rounded-xl" onClick={()=>{
+              const key = (document.querySelector('#key-input') as HTMLInputElement).value;
+              setKey(key);
+              localStorage.setItem('apiKey',key);
+            }}>
+              Save
+            </button>
+        </div>:
+          <div className="flex gap-2">
+            <button onClick={()=>{
+              setKey(null);
+              localStorage.removeItem('apiKey');
+            }} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Change Key</button>
+            <button onClick={clickHandler} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Classify</button>
+          </div>
+        }
       </div>
       <div className="w-full max-w-4xl bg-white shadow-md rounded-lg p-6 overflow-y-auto h-[25rem]">
         {
