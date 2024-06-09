@@ -11,7 +11,7 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
-const API_KEY = process.env.GEMINI_API_KEY!;
+// const API_KEY = process.env.GEMINI_API_KEY!;
 // const genAI = new GoogleGenerativeAI(API_KEY);
 
 // app.post('/classify', async(req:Request,res:Response)=>{
@@ -41,7 +41,7 @@ const API_KEY = process.env.GEMINI_API_KEY!;
 
 app.post('/classify', async(req:Request,res:Response)=>{
     try{
-        const {emails,apiKey} = req.body;
+        const {emails,apiKey} = req.body.data;
         const response = await classifyEmails(emails,apiKey);
         return res.status(200).json({text:response})
     } catch(e:any){

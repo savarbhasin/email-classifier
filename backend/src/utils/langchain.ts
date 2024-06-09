@@ -8,7 +8,7 @@ interface inputType{
 
 export const classifyEmails = async (data:inputType[], key:string) => {
     
-    const models = new ChatOpenAI({openAIApiKey:key,model:'gpt-4o'});
+    const models = new ChatOpenAI({openAIApiKey:key,model:'gpt-3.5-turbo-16k'});
 
     const promptTemplate = `You are an email analyst at a company and your task is to classify emails into different categories.
     I will give you a json array of email data (subject and snippet). Classify the emails based on the following categories:

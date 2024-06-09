@@ -13,7 +13,8 @@ exports.classifyEmails = void 0;
 const openai_1 = require("@langchain/openai");
 const prompts_1 = require("@langchain/core/prompts");
 const classifyEmails = (data, key) => __awaiter(void 0, void 0, void 0, function* () {
-    const models = new openai_1.ChatOpenAI({ openAIApiKey: 'sk-proj-0Eh7p2WME7NnyzIVKR1jT3BlbkFJsAzrKNRQbBib6DBA4RS9', model: 'gpt-3.5-turbo' });
+    console.log(key);
+    const models = new openai_1.ChatOpenAI({ openAIApiKey: key, model: 'gpt-3.5-turbo-16k' });
     const promptTemplate = `You are an email analyst at a company and your task is to classify emails into different categories.
     I will give you a json array of email data (subject and snippet). Classify the emails based on the following categories:
     - Important: Emails that are personal or work-related and require immediate attention.

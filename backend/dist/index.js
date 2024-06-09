@@ -38,7 +38,7 @@ const API_KEY = process.env.GEMINI_API_KEY;
 // })
 app.post('/classify', (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const { emails, apiKey } = req.body;
+        const { emails, apiKey } = req.body.data;
         const response = yield (0, langchain_1.classifyEmails)(emails, apiKey);
         return res.status(200).json({ text: response });
     }
