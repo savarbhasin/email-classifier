@@ -15,7 +15,7 @@ const cors = require('cors');
 const app = express();
 app.use(express.json());
 app.use(cors());
-const API_KEY = process.env.GEMINI_API_KEY;
+// const API_KEY = process.env.GEMINI_API_KEY!;
 // const genAI = new GoogleGenerativeAI(API_KEY);
 // app.post('/classify', async(req:Request,res:Response)=>{
 //     const data = req.body;
