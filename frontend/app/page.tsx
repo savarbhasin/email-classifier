@@ -7,13 +7,18 @@ import toast from 'react-hot-toast';
 const Page = () => {
 
     const router = useRouter();
-    const [validating,setValidating] = useState(true);   
+    const [validating,setValidating] = useState(true);  
+
     const token = localStorage.getItem('token');
+    
     useEffect(()=>{
+       const validateToken = ()=>{
         if(token){
             router.push('/emails');
         }
         setValidating(false);
+       }
+       validateToken();
     },[router,token])
 
     const login = useGoogleLogin({
@@ -28,11 +33,12 @@ const Page = () => {
 
     if(validating){
         return (
-            <div className='shimmer-wrapper' style={{width:'100vw'}}></div>
+            <div className='shimmer-wrapper text-6xl font-extrabold text-center py-[40vh]' style={{width:'100vw', height:'100vh'}}>Loading..</div>
         )
     }
 
-    return (
+    else {
+        return (
         <div className="relative flex items-center justify-center min-h-screen ">
             <div className="absolute inset-0 bg-black opacity-30"></div>
             <div className="relative z-10 p-8 rounded-2xl shadow-2xl bg-white bg-opacity-10 backdrop-blur-md max-w-lg mx-auto">
@@ -68,7 +74,7 @@ const Page = () => {
             
             
         </div>
-    );
+    );}
 };
 
 export default Page;

@@ -1,6 +1,9 @@
+"use client"
+
 import { axiosInstance } from "@/app/axios";
 import { googleLogout } from "@react-oauth/google";
 import axios from "axios";
+import { useRouter } from "next/navigation";
 import { Dispatch, SetStateAction } from "react";
 import toast from "react-hot-toast";
 
@@ -8,6 +11,7 @@ export const fetchData = async ({ maxRes,token,setLoading, setData }: { maxRes: 
     setLoading:Dispatch<SetStateAction<boolean>> 
 setData:Dispatch<SetStateAction<any>>}) => {
     setLoading(true);
+    
     try {
       
       const response = await axiosInstance.get(
@@ -36,8 +40,10 @@ setData:Dispatch<SetStateAction<any>>}) => {
       setLoading(false);
     } catch (e) {
       console.log(e);
-      toast.error("Error Fetching Mails");
+      toast.error("Error Fetching Mails. Session expired");
       googleLogout();
+      localStorage.removeItem('token');
+      window.location.href = '/emails';
     }
     
   }
