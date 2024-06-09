@@ -166,7 +166,7 @@ export default function Home() {
 
   useEffect(() => {
     if (!token) {
-      router.push('/login');
+      router.push('/');
     }
     const key = typeof window !== 'undefined' ? localStorage.getItem('apiKey') : null;
     if (key) {
