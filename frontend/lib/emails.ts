@@ -42,7 +42,7 @@ setData:Dispatch<SetStateAction<any>>}) => {
       console.log(e);
       toast.error("Error Fetching Mails. Session expired");
       googleLogout();
-      localStorage.removeItem('token');
+      typeof window !== 'undefined' && localStorage.removeItem('token');
       window.location.href = '/emails';
     }
     

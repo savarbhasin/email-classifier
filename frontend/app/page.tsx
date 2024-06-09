@@ -9,7 +9,8 @@ const Page = () => {
     const router = useRouter();
     const [validating,setValidating] = useState(true);  
 
-    const token = localStorage.getItem('token');
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
+    
     
     useEffect(()=>{
        const validateToken = ()=>{
@@ -23,7 +24,7 @@ const Page = () => {
 
     const login = useGoogleLogin({
         onSuccess: async (response) => {
-            localStorage.setItem('token', response.access_token);
+            typeof window !== 'undefined' && localStorage.setItem('token', response.access_token);
             router.push('/emails');
             toast.success("Login Successful");
         },

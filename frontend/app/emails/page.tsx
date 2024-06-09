@@ -15,7 +15,8 @@ export default function Home() {
   const [labelLoading,setLabelLoading] = useState(false);
   const [key,setKey] = useState<string | null>(null);
 
-  const token = localStorage.getItem('token');
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   const router = useRouter();
   const hasFetchedData = useRef(false);
   const [data, setData] = useState<any>([]);
@@ -27,7 +28,7 @@ export default function Home() {
       router.push('/login');
     }
 
-    const key = localStorage.getItem('apiKey');
+    const key = typeof window !== 'undefined' ? localStorage.getItem('apiKey') : null;
     if(key){
       setKey(key);
     }
@@ -68,7 +69,7 @@ export default function Home() {
         </select>
         <button onClick={()=>{
           googleLogout();
-          localStorage.removeItem('token');
+          typeof window !== 'undefined' && localStorage.removeItem('token');
           router.push('/');
         }} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Logout</button>
         { !key? <div className="flex gap-2">
@@ -76,7 +77,7 @@ export default function Home() {
             <button className="px-3 py-2 bg-blue-500 text-white rounded-xl" onClick={()=>{
               const key = (document.querySelector('#key-input') as HTMLInputElement).value;
               setKey(key);
-              localStorage.setItem('apiKey',key);
+              typeof window !== 'undefined' && localStorage.setItem('apiKey',key);
             }}>
               Save
             </button>
@@ -84,7 +85,7 @@ export default function Home() {
           <div className="flex gap-2">
             <button onClick={()=>{
               setKey(null);
-              localStorage.removeItem('apiKey');
+              typeof window !== 'undefined' && localStorage.removeItem('apiKey');
             }} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Change Key</button>
             <button onClick={()=>classifyEmails({setLabels,setLabelLoading,data,key})} className="px-3 py-2 bg-blue-500 text-white rounded-xl">Classify</button>
           </div>
