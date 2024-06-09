@@ -11,6 +11,7 @@ const Page = () => {
 
     useEffect(() => {
         const validateToken = () => {
+            setValidating(true)
             if (token) {
                 router.push('/emails');
             }
