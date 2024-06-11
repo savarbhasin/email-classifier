@@ -15,7 +15,7 @@ axiosInstance.interceptors.response.use(
         return Promise.reject(error);
       }
       const router = useRouter();
-      router.push('/login');
+      router.push('/');
       toast.error("Session Expired. Please login again");
       return Promise.reject(error);
     }

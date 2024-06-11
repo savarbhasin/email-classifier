@@ -12,7 +12,7 @@ const Page = () => {
     useEffect(() => {
         const validateToken = () => {
             setValidating(true)
-            if (token) {
+            if (typeof window !== 'undefined' && localStorage.getItem('token')) {
                 router.push('/emails');
             }
             setValidating(false);
