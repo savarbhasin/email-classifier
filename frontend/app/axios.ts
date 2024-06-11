@@ -16,6 +16,7 @@ axiosInstance.interceptors.response.use(
       }
       const router = useRouter();
       router.push('/');
+      typeof window !== 'undefined' && localStorage.removeItem('token');
       toast.error("Session Expired. Please login again");
       return Promise.reject(error);
     }
